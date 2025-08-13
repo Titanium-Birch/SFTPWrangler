@@ -9,7 +9,7 @@ It's a low-maintenance way to handle SFTP push and pull operations.
 
 ### What problem does it solve?
 
-Operating SFTP servers and doing it well can be a lot of work. Luckily, AWS's **Transfer Family** provides SFTP servers "as a service", meaning users don't need to deal with operating/monitoring/patching/securing/etc the servers. That's a big chunk of the value. Thank you, AWS! This repo is mostly "infrastructure as code" using Terraform to configure Transfer Family and a few other AWS services around it.
+Operating SFTP servers and doing it well can be a lot of work. Luckily, [AWS Transfer Family](https://aws.amazon.com/aws-transfer-family/) provides SFTP servers "as a service", meaning users don't need to deal with operating/monitoring/patching/securing/etc the servers. That's a big chunk of the value. Thank you, AWS! This repo is mostly "infrastructure as code" using Terraform to configure Transfer Family and a few other AWS services around it.
 
 In short, this repo lets us:
 - **input:** configuration about SFTP counterparties
