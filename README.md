@@ -1,4 +1,4 @@
-# SFTP Wrangler
+# SFTP Wrangler 📂🤠
 
 This project demonstrates how [Titanium Birch](https://www.titaniumbirch.com), an investment firm, manages its SFTP infrastructure. We created this solution because some of our counterparties can only deliver data to us via SFTP rather than APIs. We hope this code helps others who work with SFTP and want to minimise the time and effort spent managing it.
 
