@@ -1,6 +1,10 @@
+<div align="center">
+  <img src="sftp-wrangler-logo.png" alt="SFTP Wrangler Logo" width="200">
+</div>
+
 # SFTP Wrangler
 
-This project demonstrates how [Titanium Birch](https://www.titaniumbirch.com), an investment firm, manages its SFTP infrastructure. We created this solution because some of our counterparties can only deliver data to us via SFTP rather than APIs. We hope this code helps others who work with SFTP and want to minimise the time and effort spent managing it.
+This project demonstrates how [Titanium Birch](https://www.titaniumbirch.com), an investment firm, manages its SFTP infrastructure. We created this solution because some of our counterparties can only deliver data to us via SFTP rather than APIs. We hope this code helps others who work with SFTP and want to minimise the time and effort spent managing it. We use the MIT license.
 
 ## Introduction
 
@@ -46,6 +50,27 @@ flowchart LR
     end
 ```
 
+## Highlights of Technologies Used
+
+- Various **AWS services** - see `/modules/` for the Terraform configs. This repo is purposely "AWS only", not cross-cloud.
+- **Python packages**: see `pyproject.toml`. Managed via `poetry`.
+- **Pytest** for unit and integration tests
+- **Docker** for 1) devcontainers, 2) to provide the image on which to run AWS Lambdas so they can do GPG decryption 3) integration tests. See `docker-compose.yml`
+- **Localstack** for mocking AWS services in tests
+- **Terraform** to describe infrastructure
+- **atmoz/sftp** for SFTP servers in integration tests
+
+## Folder structure
+
+- **`.cursor/`** - Rules for AI agents in the Cursor IDE
+- **`.devcontainer/`** - Instructs IDEs supporting the devcontainer standard (such as VSCode and others) how to use Docker to run the development environment.
+- **`examples/`** - Usage examples and setup configurations for different deployment scenarios.
+- **`layers/`** - Pre-built AWS extensions that get bundled into the Lambda runtime environment.
+- **`modules/`** - Configuration for the `Terraform` tool. It describes the expected state of AWS infrastructure, which Terraform then automatically creates.
+- **`src/`** - Python source code for all Lambda functions handling data ingestion and processing such as SFTP pull, GPG decryption, unzipping, converting XLSX to CSV, and other steps to "get the data clean enough to be useful to downstream applications."
+- **`tests/`** - Comprehensive test suite including unit and integration tests.
+
+
 ## S3 Bucket Stages
 
 Files flow through S3 buckets in this order:
@@ -76,7 +101,7 @@ The module creates the following AWS resources. Some resources are conditionally
   - API integration functions
   - Admin task functions
   - Secret rotation functions
-- **ECR Repository** for Lambda container images. We run the Lambdas on their own Docker images to handle PGP decryption.
+- **ECR Repository** for Lambda container images. We run the Lambdas on their own Docker images to handle GPG decryption.
 - **EventBridge Rules** for scheduled data ingestion
 
 ### Optional Features (based on configuration)
@@ -100,6 +125,7 @@ This project is designed to be opened in an IDE that supports `.devcontainer` fo
 
 **Recommended IDEs:**
 - Visual Studio Code with Dev Containers extension
+- Cursor
 - JetBrains IDEs with dev container support
 - GitHub Codespaces
 
