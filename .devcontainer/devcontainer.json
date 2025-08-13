@@ -1,0 +1,96 @@
+{
+  "name": "SFTP Wrangler",
+  "image": "python:3.12",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.suggest.insertMode": "replace",
+        "files.exclude": {
+          "**/__pycache__": true
+        },
+        "python.testing.pytestArgs": [
+          "tests", "-m", "unit or integration"
+        ],
+        "python.testing.unittestEnabled": false,
+        "python.testing.nosetestsEnabled": false,
+        "python.testing.pytestEnabled": true,
+        "python.defaultInterpreterPath": "/var/folders/SFTPWrangler/.venv/bin/python",
+        "python.analysis.indexing": true,
+        "python.analysis.packageIndexDepths": [
+          {
+            "name": "",
+            "depth": 2,
+            "includeAllSymbols": true
+          }
+        ],
+        "[python]": {
+          "editor.rulers": [
+            80,
+            120
+          ],
+          "editor.trimAutoWhitespace": true,
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+          }
+        },
+        "[markdown]": {
+          "editor.formatOnSave": true
+        },
+        "[yaml]": {
+          "editor.formatOnSave": true
+        }
+      },
+      "extensions": [
+        // Python support
+        "ms-python.python",
+        // Ruff linting support
+        "charliermarsh.ruff",
+        // Terraform support
+        "hashicorp.terraform",
+        // Generation of Python docstrings
+        "njpwerner.autodocstring",
+        // Markdown table of contents
+        "yzhang.markdown-all-in-one",
+        // AWS Toolkit for interacting with AWS services
+        "amazonwebservices.aws-toolkit-vscode",
+        // Improved typing support for boto3
+        "Boto3.typed",
+        // YAML Support
+        "redhat.vscode-yaml",
+        // Mermaid in Markdown
+        "bierner.markdown-mermaid"
+      ]
+    }
+  },
+  "remoteUser": "root",
+  "containerEnv": {
+    "GITHUB_WORKSPACE": "/var/folders/SFTPWrangler"
+  },
+  "mounts": [
+      "source=${env:HOME}${env:USERPROFILE}/.cache,target=/var/folders/.cache,type=bind"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers-extra/features/terraform-asdf:2": {
+      "version": "1.10.4"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "moby": false,
+      "azureDnsAutoDetection": false,
+      "installDockerBuildx": false,
+      "installDockerComposeSwitch": false
+    },
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": false,
+      "installZsh": false,
+      "installOhMyZsh": true
+    }
+  },
+  "postCreateCommand": "./postCreateCommand.sh",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/var/folders/SFTPWrangler,type=bind",
+  "workspaceFolder": "/var/folders/SFTPWrangler"
+}

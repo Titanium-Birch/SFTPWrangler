@@ -1,0 +1,12 @@
+Transaction Date,Value Date,Statement Code,Reference,Debit Amount,Credit Amount,Client Reference,Additional Reference, Misc Reference,account_name,statement_date,currency,available_balance,ledger_balance
+30 Nov 23,30 Nov 23,INT,,,0.9,,,,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+31 Oct 23,31 Oct 23,INT,,,1.11,,,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+20 Oct 23,20 Oct 23,OTT,,2296.93,,1.03822E+11,0016OT7510340,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+2 Oct 23,2 Oct 23,OTT AGT,,9,,1.03719E+11,0016OT6656038,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+2 Oct 23,2 Oct 23,OTT CHG,,14.51,,1.03719E+11,0016OT6656038,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+2 Oct 23,2 Oct 23,OTT,,100000,,1.03719E+11,0016OT6656038,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+2 Oct 23,2 Oct 23,OTT AGT,,9,,1.03712E+11,0016OT6597256,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+2 Oct 23,2 Oct 23,OTT CHG,,14.52,,1.03712E+11,0016OT6597256,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+2 Oct 23,2 Oct 23,OTT,,100000,,1.03712E+11,0016OT6597256,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+1 Oct 23,1 Oct 23,TRF,,,140000,XXX-XXXXXX-X : BANK-ONLINE,,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81
+30 Sep 23,30 Sep 23,INT,,,2.4,,,blah,Generic Multi-Currency Savings Account XXX-XXXXXX-X,13 Mar 2024,USD,12345.81,12345.81

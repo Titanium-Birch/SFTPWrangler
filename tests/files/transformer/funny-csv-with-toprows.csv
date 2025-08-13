@@ -1,0 +1,35 @@
+
+
+
+
+
+
+
+
+
+
+
+Account Details For:,Generic Multi-Currency Savings Account XXX-XXXXXX-X
+Statement as at:,13 Mar 2024
+
+Currency:,USD - US Dollar
+
+Available Balance:,12345.81
+Ledger Balance:,12345.81
+
+Transaction Date,Value Date,Statement Code,Reference,Debit Amount,Credit Amount,Client Reference,Additional Reference, Misc Reference
+
+30 Nov 23,30 Nov 23,INT,,,0.9,,,,
+31 Oct 23,31 Oct 23,INT,,,1.11,,,blah,
+20 Oct 23,20 Oct 23,OTT,,2296.93,,1.03822E+11,0016OT7510340,blah,
+2 Oct 23,2 Oct 23,OTT AGT,,9,,1.03719E+11,0016OT6656038,blah,
+2 Oct 23,2 Oct 23,OTT CHG,,14.51,,1.03719E+11,0016OT6656038,blah,
+2 Oct 23,2 Oct 23,OTT,,100000,,1.03719E+11,0016OT6656038,blah,
+2 Oct 23,2 Oct 23,OTT AGT,,9,,1.03712E+11,0016OT6597256,blah,
+2 Oct 23,2 Oct 23,OTT CHG,,14.52,,1.03712E+11,0016OT6597256,blah,
+2 Oct 23,2 Oct 23,OTT,,100000,,1.03712E+11,0016OT6597256,blah,
+1 Oct 23,1 Oct 23,TRF,,,140000,XXX-XXXXXX-X : BANK-ONLINE,,blah,
+30 Sep 23,30 Sep 23,INT,,,2.4,,,blah,
+
+
+

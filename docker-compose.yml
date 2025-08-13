@@ -1,0 +1,47 @@
+services:
+  keygen:
+    image: alpine
+    command: >
+      sh -c "
+        apk add --no-cache openssh &&
+        mkdir -p /keys &&
+        rm -f /keys/id_rsa /keys/id_rsa.pub &&
+        ssh-keygen -t rsa -b 2048 -f /keys/id_rsa -N '' &&
+        cp /keys/id_rsa.pub /keys/authorized_keys
+      "
+    volumes:
+      - generated-keys:/keys
+    restart: "no"
+  localstack:
+    image: localstack/localstack:2.0
+    depends_on:
+      - keygen
+    platform: linux/amd64
+    environment:
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - REGION=eu-west-1  # integration tests will have to use this region
+      - BUCKET_NAME_INCOMING=incoming-files-during-test  # integration tests must use this bucket name
+      - BUCKET_NAME_UPLOAD=uploaded-files-during-test  # integration tests must use this bucket name
+      - BUCKET_NAME_FILES=attachment-files-during-test  # integration tests must use this bucket name
+      - BUCKET_NAME_CATEGORIZED=categorized-files-during-test  # integration tests must use this bucket name
+    ports:
+      - "4566"
+    volumes:
+      - generated-keys:/generated/keys
+      - '${GITHUB_WORKSPACE:-.}/tests/files/localstack/localstack-script.sh:/etc/localstack/init/ready.d/script.sh'
+
+  sftp:
+    image: atmoz/sftp
+    depends_on:
+      - keygen
+    platform: linux/amd64
+    ports:
+      - "22"
+    environment:
+      SFTP_USERS: sftpuser::100:100:download
+    volumes:
+      - generated-keys:/home/sftpuser/.ssh
+
+volumes:
+  generated-keys:

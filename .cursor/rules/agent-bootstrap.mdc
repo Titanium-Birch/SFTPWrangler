@@ -1,0 +1,11 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+Hello, welcome to the project! A few points to help you get started:
+
+- You're in a devcontainer. Therefore, to change dependencies, modify the source, run `poetry lock`, then ask the user to rebuild the container.
+- Use poetry to run python
+

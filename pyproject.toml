@@ -1,0 +1,63 @@
+[project]
+name = "sftp-wrangler"
+version = "0.1.0"
+description = ""
+dependencies = []
+authors = [
+    {name = "tb", email = "inquiries@titaniumbirch.com"},
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+
+[tool.poetry]
+packages = [
+    {include = "*", from = "src"},
+    {include = "test_utils", from = "tests"}
+]
+
+[tool.poetry.dependencies]
+aws-lambda-typing = "^2.18.0"
+dataclasses-json = "^0.6.1"
+requests = "^2.32.0"
+python-gnupg = "^0.5.2"
+pandas = "^2.2.2"
+xlrd = "^2.0.1"
+openpyxl = "^3.1.4"
+paramiko = "^3.4.0"
+boto3-stubs = {extras = ["s3", "ssm", "secretsmanager"], version = "^1.35.51"}
+urllib3 = "^2.5.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.9.1"
+pytest-mock = "^3.11.1"
+pytest = "^7.4.2"
+pytest-docker = "^2.0.1"
+pytest-spec = "^3.2.0"
+pre-commit = "^3.5.0"
+boto3 = "^1.35.0"
+requests-mock = "1.12.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "--spec"
+spec_test_format = "{result} {docstring_summary}"
+pythonpath = [
+    "src", "tests"
+]
+testpaths = "tests"
+markers = [
+    "unit: marks tests as unit tests that execute quickly",
+    "integration: marks tests that require a docker compose testbed as integration tests",
+]
+filterwarnings = []
+
+[tool.ruff]
+line-length = 120
+exclude = ["tests"]
+
+[tool.ruff.lint]
+select = ["ANN", "E", "F", "N", "PYI", "PLE", "Q", "RUF", "SIM", "T20"]
+ignore = []
