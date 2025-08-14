@@ -1,6 +1,11 @@
-# SFTP Wrangler 📂🤠
+<div align="center">
+  <img src="sftp-wrangler-logo.png" alt="SFTP Wrangler Logo" width="200">
+</div>
 
-This project demonstrates how [Titanium Birch](https://www.titaniumbirch.com), an investment firm, manages its SFTP infrastructure. We created this solution because some of our counterparties can only deliver data to us via SFTP rather than APIs. We hope this code helps others who work with SFTP and want to minimise the time and effort spent managing it.
+# SFTP Wrangler
+[![CI](https://github.com/Titanium-Birch/SFTPWrangler/actions/workflows/push_branch.yaml/badge.svg)](https://github.com/Titanium-Birch/SFTPWrangler/actions/workflows/push_branch.yaml)
+
+This project demonstrates how [Titanium Birch](https://www.titaniumbirch.com), an investment firm, manages its SFTP infrastructure. We created this solution because some of our counterparties can only deliver data to us via SFTP rather than APIs. We hope this code helps others who work with SFTP and want to minimise the time and effort spent managing it. We use the MIT license.
 
 ## Introduction
 
@@ -46,6 +51,28 @@ flowchart LR
     end
 ```
 
+## Highlights of Technologies Used
+
+- Various **AWS services** - see `/modules/` for the Terraform configs. This repo is purposely "AWS only", not cross-cloud.
+- **Python packages**: see `pyproject.toml`. Managed via `poetry`.
+- **Pytest** for unit and integration tests
+- **Docker** for 1) devcontainers, 2) to provide the image on which to run AWS Lambdas so they can do GPG decryption 3) integration tests. See `docker-compose.yml`
+- **Localstack** for mocking AWS services in tests
+- **Terraform** to describe infrastructure
+- **atmoz/sftp** for SFTP servers in integration tests
+
+## Folder structure
+
+- **`.cursor/`** - Rules for AI agents in the Cursor IDE
+- **`.devcontainer/`** - Instructs IDEs supporting the devcontainer standard (such as VSCode and others) how to use Docker to run the development environment.
+- **`.github/`** - Configures Github Actions to run tests.
+- **`examples/`** - Usage examples and setup configurations for different deployment scenarios.
+- **`layers/`** - Pre-built AWS extensions that get bundled into the Lambda runtime environment.
+- **`modules/`** - Configuration for the `Terraform` tool. It describes the expected state of AWS infrastructure, which Terraform then automatically creates.
+- **`src/`** - Python source code for all Lambda functions handling data ingestion and processing such as SFTP pull, GPG decryption, unzipping, converting XLSX to CSV, and other steps to "get the data clean enough to be useful to downstream applications."
+- **`tests/`** - Comprehensive test suite including unit and integration tests.
+
+
 ## S3 Bucket Stages
 
 Files flow through S3 buckets in this order:
@@ -76,7 +103,7 @@ The module creates the following AWS resources. Some resources are conditionally
   - API integration functions
   - Admin task functions
   - Secret rotation functions
-- **ECR Repository** for Lambda container images. We run the Lambdas on their own Docker images to handle PGP decryption.
+- **ECR Repository** for Lambda container images. We run the Lambdas on their own Docker images to handle GPG decryption.
 - **EventBridge Rules** for scheduled data ingestion
 
 ### Optional Features (based on configuration)
@@ -100,6 +127,7 @@ This project is designed to be opened in an IDE that supports `.devcontainer` fo
 
 **Recommended IDEs:**
 - Visual Studio Code with Dev Containers extension
+- Cursor
 - JetBrains IDEs with dev container support
 - GitHub Codespaces
 
@@ -137,7 +165,14 @@ poetry run python -m pytest -m integration
 - **LocalStack**: Simulates AWS services locally
 - **atmoz/sftp**: Provides SFTP server for testing
 
-These containers are automatically managed during integration test execution.
+**Automatic Docker Management:**
+Integration tests use the `pytest-docker` plugin, which automatically:
+- Starts Docker Compose services defined in `docker-compose.yml` when integration tests begin
+- Waits for all services to be healthy before running tests (using the `composed_environment` fixture)
+- Cleans up and stops all containers when tests complete
+- Downloads required Docker images as needed
+
+No manual `docker compose up` is required - the testing framework handles all container lifecycle management.
 
 ### Test Coverage
 ```bash
@@ -257,8 +292,9 @@ For detailed setup instructions, see [examples/README.md](examples/README.md).
    poetry run python -m pytest -m unit
    poetry run python -m pytest -m integration
    ```
-3. Follow existing code style and patterns
-4. Update documentation for any new features
+3. Ensure CI passes on your pull request (tests run automatically)
+4. Follow existing code style and patterns
+5. Update documentation for any new features
 
 ## Disclaimer
 
