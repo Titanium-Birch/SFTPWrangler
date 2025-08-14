@@ -137,7 +137,14 @@ poetry run python -m pytest -m integration
 - **LocalStack**: Simulates AWS services locally
 - **atmoz/sftp**: Provides SFTP server for testing
 
-These containers are automatically managed during integration test execution.
+**Automatic Docker Management:**
+Integration tests use the `pytest-docker` plugin, which automatically:
+- Starts Docker Compose services defined in `docker-compose.yml` when integration tests begin
+- Waits for all services to be healthy before running tests (using the `composed_environment` fixture)
+- Cleans up and stops all containers when tests complete
+- Downloads required Docker images as needed
+
+No manual `docker compose up` is required - the testing framework handles all container lifecycle management.
 
 ### Test Coverage
 ```bash
