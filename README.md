@@ -64,6 +64,7 @@ flowchart LR
 
 - **`.cursor/`** - Rules for AI agents in the Cursor IDE
 - **`.devcontainer/`** - Instructs IDEs supporting the devcontainer standard (such as VSCode and others) how to use Docker to run the development environment.
+- **`.github/`** - Configures Github Actions to run tests.
 - **`examples/`** - Usage examples and setup configurations for different deployment scenarios.
 - **`layers/`** - Pre-built AWS extensions that get bundled into the Lambda runtime environment.
 - **`modules/`** - Configuration for the `Terraform` tool. It describes the expected state of AWS infrastructure, which Terraform then automatically creates.
