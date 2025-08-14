@@ -52,8 +52,6 @@
         "hashicorp.terraform",
         // Generation of Python docstrings
         "njpwerner.autodocstring",
-        // Markdown table of contents
-        "yzhang.markdown-all-in-one",
         // AWS Toolkit for interacting with AWS services
         "amazonwebservices.aws-toolkit-vscode",
         // Improved typing support for boto3
