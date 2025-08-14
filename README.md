@@ -266,8 +266,9 @@ For detailed setup instructions, see [examples/README.md](examples/README.md).
    poetry run python -m pytest -m unit
    poetry run python -m pytest -m integration
    ```
-3. Follow existing code style and patterns
-4. Update documentation for any new features
+3. Ensure CI passes on your pull request (tests run automatically)
+4. Follow existing code style and patterns
+5. Update documentation for any new features
 
 ## Disclaimer
 
