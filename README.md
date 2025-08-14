@@ -1,5 +1,7 @@
 # SFTP Wrangler
 
+[![CI](https://github.com/Titanium-Birch/SFTPWrangler/actions/workflows/push_branch.yaml/badge.svg)](https://github.com/Titanium-Birch/SFTPWrangler/actions/workflows/push_branch.yaml)
+
 This project demonstrates how [Titanium Birch](https://www.titaniumbirch.com), an investment firm, manages its SFTP infrastructure. We created this solution because some of our counterparties can only deliver data to us via SFTP rather than APIs. We hope this code helps others who work with SFTP and want to minimise the time and effort spent managing it.
 
 ## Introduction
@@ -137,7 +139,14 @@ poetry run python -m pytest -m integration
 - **LocalStack**: Simulates AWS services locally
 - **atmoz/sftp**: Provides SFTP server for testing
 
-These containers are automatically managed during integration test execution.
+**Automatic Docker Management:**
+Integration tests use the `pytest-docker` plugin, which automatically:
+- Starts Docker Compose services defined in `docker-compose.yml` when integration tests begin
+- Waits for all services to be healthy before running tests (using the `composed_environment` fixture)
+- Cleans up and stops all containers when tests complete
+- Downloads required Docker images as needed
+
+No manual `docker compose up` is required - the testing framework handles all container lifecycle management.
 
 ### Test Coverage
 ```bash
@@ -257,8 +266,9 @@ For detailed setup instructions, see [examples/README.md](examples/README.md).
    poetry run python -m pytest -m unit
    poetry run python -m pytest -m integration
    ```
-3. Follow existing code style and patterns
-4. Update documentation for any new features
+3. Ensure CI passes on your pull request (tests run automatically)
+4. Follow existing code style and patterns
+5. Update documentation for any new features
 
 ## Disclaimer
 
