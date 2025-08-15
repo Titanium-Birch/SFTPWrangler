@@ -31,16 +31,11 @@ Assumptions:
 ```mermaid
 graph TB
     subgraph "External Actors"
-        CP1[Counterparty A]
-        CP2[Counterparty B]
+        CP1[Trusted Counterparty A]
+        CP2[Trusted Counterparty B]
         DEP[Dependencies]
         DEV[Developers]
     end
-
-   subgraph "Workstations"
-      HOST[Workstation Host]
-      DEVC[DevContainer]
-   end
 
     subgraph "AWS Infrastructure"
       
@@ -62,7 +57,6 @@ graph TB
             S3IN[S3 Incoming Bucket]
             S3CAT[S3 Categorized Bucket]
             S3FILES[S3 Files Bucket]
-            S3TEMP[S3 Temp Bucket]
         end
         
         subgraph "Security Services"
@@ -183,7 +177,7 @@ SFTP Wrangler employs the follow mitigations to reduce the risks of the above th
 ### Mitigations on Workstations
 
 - All code, including IDE extensions, run in a container only via the devcontainer standard. Keep the host clean.
-- By policy and design: no confidential data on workstations (ie: the SFTP files don't touch workstations).
+- By policy and design: no business data on workstations (ie: the SFTP files don't touch workstations).
 - For most development, there's no need for credentials in the container. If/when it's necessary to authenticate
   to AWS, in order of preference:
     - rely on CI to run terraform and have github actions authenticate to AWS via OIDC
@@ -192,17 +186,17 @@ SFTP Wrangler employs the follow mitigations to reduce the risks of the above th
   - generated in RAM-only Docker containers, then pasted into 1Password
   - stored in 1Password, copied to AWS Secrets Manager
 - by design: the end of the pipeline is CSV files only. No ZIP, GPG, XLSX, etc., to further the reduce the risk 
-  of a human deciding to open dangerous files on their machines.
+  of humans opening dangerous files on their machines.
 
 ### Mitigations on Github
 - Github actions: authenticate to AWS using OIDC. Never use IAM users.
 - Github branches:
-  - require reviews before merging PRs
+  - require reviews and green CI before merging PRs
   - no pushing to main
 
 ### SFTP authentication
 - SFTP Pull: in configuration, define the expected SSH key fingerprint for the counterparty's SFTP server. Error if the key does not match.
-- SFTP Push: users and the counterparty must exchange the SSH key fingerprint of AWS Transfer Family isntance out-of-band.
+- SFTP Push: users and the counterparty must exchange the SSH key fingerprint of AWS Transfer Family instance out-of-band. This is easy to forget and some counterparties don't support pinning fingerprints, so this is a fundamental weakness in the system because of its usage of SFTP.
 
 ### SFTP authorization
 - SSH keys only, no passwords
@@ -226,15 +220,15 @@ Processes for deciding which dependencies to trust:
 
 ## Backlog of additional mitigations
 
-The following measures would further reduce risks.
+The following measures would further reduce risks but aren't yet implemented.
 
 ### Lambda Security Hardening
 
 **Reduce blast-radius from remote-code-execution in any Lambda:**
-- Where practical, use custom file-processing steps in Transfer Family, especially for SFTP Push
-- Further tighten IAM permissions of lambdas that process untrusted files. Further restrict S3 and AWS Secrets access
-- Make the lambdas offline. They don't need Internet access
-- Consider stringing the stages together with queues to remove S3 access entirely
+- Where practical, use custom file-processing steps in Transfer Family, especially for SFTP Push.
+- Further tighten IAM permissions of lambdas that process untrusted files. Further restrict S3 and AWS Secrets access.
+- Make the lambdas offline. They don't need Internet access.
+- Consider stringing the stages together with queues to remove S3 access entirely.
 
 ### SFTP Security Enhancements
 
