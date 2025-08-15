@@ -20,5 +20,6 @@ for details.
 
 Feel free to:
 
+- Click "Report a vulnerability" to contact us privately via github
 - Create a PR and fix it
 - Contact us at hello@titaniumbirch.com
