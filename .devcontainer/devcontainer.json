@@ -50,12 +50,8 @@
         "charliermarsh.ruff",
         // Terraform support
         "hashicorp.terraform",
-        // Generation of Python docstrings
-        "njpwerner.autodocstring",
         // AWS Toolkit for interacting with AWS services
         "amazonwebservices.aws-toolkit-vscode",
-        // Improved typing support for boto3
-        "Boto3.typed",
         // YAML Support
         "redhat.vscode-yaml",
         // Mermaid in Markdown

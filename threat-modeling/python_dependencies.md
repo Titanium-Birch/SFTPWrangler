@@ -328,25 +328,6 @@ VALUE: MEDIUM
 Decision: APPROVE ✓ - Standard development workflow tool
 ```
 
-## Security Controls & Action Items
-
-### Implemented
-- Poetry lock file with exact version pinning ✓
-- Separate dev/production dependency groups ✓
-- Regular dependency updates via devcontainer rebuild ✓
-- Python version pinning (3.12) ✓
-
-### Immediate Actions Required
-1. **ENABLE** GitHub Dependabot security alerts and automated PRs (planned but not yet implemented)
-2. **MONITOR** `dataclasses-json` - Consider migration to `pydantic` for better maintenance
-3. **REVIEW** transitive dependencies for hidden risks
-
-### Monitoring Protocol
-- **Automated**: Dependabot alerts for security vulnerabilities (when enabled)
-- **Monthly**: Review Dependabot PRs and dependency changelogs
-- **Quarterly**: Re-assess all dependencies using current framework
-- **Immediate**: Respond to critical security vulnerabilities within 24 hours
-
 ### Dependency Approval Process
 1. Apply template evaluation for any new dependency requests
 2. Require business justification for MEDIUM+ risk dependencies
@@ -360,41 +341,3 @@ Decision: APPROVE ✓ - Standard development workflow tool
 - Packages with excessive transitive dependencies (>100)
 - Dependencies that modify Python import system or core behavior
 
-## Supply Chain Risk Mitigations
-
-### Current Protections
-- **Poetry Lock File**: Exact version pinning prevents dependency confusion
-- **Devcontainer**: Isolated build environment
-- **Python Version Pinning**: Consistent runtime environment
-- **Minimal Dependencies**: Focus on essential packages only
-
-### Recommended Enhancements
-1. **GitHub Dependabot**: Enable security alerts and automated PRs (primary dependency scanning solution)
-2. **Hash Verification**: Enable hash checking in Poetry configuration  
-3. **Private Mirror**: Consider internal PyPI mirror for critical dependencies (if needed)
-4. **Build Reproducibility**: Docker-based builds with exact dependency versions ✓
-5. **Additional Scanning**: Consider Snyk or pip-audit for supplementary analysis
-
-## Priority Risk Areas
-
-### High-Risk Dependencies Requiring Monitoring
-1. **paramiko** - SSH/SFTP operations (attack vector for MITM)
-2. **python-gnupg** - Cryptographic operations (RCE potential)
-3. **openpyxl/xlrd** - File parsing (malicious file processing)
-4. **requests** - HTTP operations (network security boundary)
-
-### Dependency Update Strategy
-- **Critical Security Patches**: Immediate update via Dependabot alerts
-- **Minor Updates**: Monthly review of Dependabot PRs
-- **Major Updates**: Quarterly evaluation with full regression testing
-- **Breaking Changes**: Planned upgrade with dedicated sprint
-
-## Related Threat Analysis
-
-This assessment addresses **T5.1 - Malicious Python Dependencies** in the main threat model, implementing systematic evaluation to reduce supply chain risks.
-
-**Key Risk Reductions:**
-- Systematic trust evaluation prevents high-risk, low-value dependencies
-- Clear approval process requires justification for new dependencies
-- Regular monitoring ensures prompt response to security issues
-- Minimal dependency principle reduces attack surface

@@ -189,43 +189,7 @@ VALUE: MEDIUM
 Decision: APPROVE ✓
 ```
 
-### REVIEW FOR REMOVAL - LOW VALUE
-
-#### 6. njpwerner.autodocstring - Auto Docstring Generator
-```
-RISK: MEDIUM (Score: 2.8/5)
-• Publisher: Individual developer (3 pts)
-• Permissions: File modification (3 pts)
-• Downloads: >500K, Rating 4.3+ (0 pts)
-• Open source, moderate activity (2 pts)
-
-VALUE: LOW
-• Business Value: LOW - Convenience feature only
-• Usage: MONTHLY - Occasional docstring generation
-• Alternatives: INTERNAL - Manual docstring writing
-• Impact: MINOR - Small time savings
-
-Decision: CONSIDER REMOVAL 🗑️ - Risk exceeds value
-```
-
-#### 7. Boto3.typed - Boto3 Type Hints
-```
-RISK: HIGH (Score: 3.4/5)
-• Publisher: Individual, unclear identity (5 pts)
-• Permissions: Type hint generation (1 pt)
-• Downloads: Lower volume (4 pts)
-• Open source, not reviewed (2 pts)
-
-VALUE: LOW
-• Business Value: LOW - Type checking convenience
-• Usage: RARELY - Limited type checking scenarios
-• Alternatives: EXTERNAL - mypy-boto3 or manual typing
-• Impact: MINOR - IDE autocomplete improvements
-
-Decision: REMOVE 🗑️ - High risk, low value
-```
-
-#### 8. bierner.markdown-mermaid - Mermaid Diagram Support
+#### 6. bierner.markdown-mermaid - Mermaid Diagram Support
 ```
 RISK: LOW (Score: 1.8/5)
 • Publisher: Individual (Microsoft employee) (3 pts)
@@ -239,7 +203,7 @@ VALUE: LOW
 • Alternatives: EXTERNAL - Mermaid live editor, draw.io
 • Impact: MINOR - Convenience for embedded diagrams
 
-Decision: CONSIDER REMOVAL 🗑️ - Can use external tools
+Decision: APPROVE ✓ - Currently installed and provides value for documentation
 ```
 
 ## Processes
