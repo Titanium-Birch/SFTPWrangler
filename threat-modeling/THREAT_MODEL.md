@@ -22,6 +22,10 @@ Out of scope:
 - non-SFTP methods like Wise and Arch APIs (todo: remove those from SFTP Wrangler)
 - hardening developer workstations beyond the devcontainer setup described here
 
+Assumptions:
+- the counterparties sending us files by SFTP are reasonably trusted. The chances of the files being
+  malicious are not high.
+
 ## Data Flow Diagram
 
 ```mermaid
@@ -147,7 +151,7 @@ graph TB
 
 - Attacker **accesses, deletes or modifies business data**:
   - by stealing an **SSH private key** and doing SFTP pull from a counterparty's servers
-  - by **man-in-the-middle'ing** us or a counterparty for SFTP push or pull
+  - by **man-in-the-middle'ing** the relevant side for SFTP push or pull
   - through **remote-code-execution** in:
     - our Lambdas and exfiltrating data from memory or S3
     - the SFTP servers operated by AWS Transfer Family
@@ -157,7 +161,8 @@ graph TB
       - Devcontainer Features
       - Packages installed via Docker
       - Packages installed via Poetry for Python
-    - by committing it into this repo and getting it past code-review
+      - Github Actions features, some of which are provided by third parties
+    - by committing into this repo and getting it past code-review
 - Attacker **compromises workstations**:
   - by:
     - introducing **malicious code via dependencies**
@@ -223,123 +228,58 @@ Processes for deciding which dependencies to trust:
 
 The following measures would further reduce risks.
 
-- Reduce blast-radius from remote-code-execution in any Lambda. Review and try to further tighten IAM permissions of lambdas that process untrusted files. Make it so a compromised lambda cannot gain access to confidential information.
+### Lambda Security Hardening
 
-1. **Enforce SFTP Host Fingerprint Verification (T1.1)**
+**Reduce blast-radius from remote-code-execution in any Lambda:**
+- Where practical, use custom file-processing steps in Transfer Family, especially for SFTP Push
+- Further tighten IAM permissions of lambdas that process untrusted files. Further restrict S3 and AWS Secrets access
+- Make the lambdas offline. They don't need Internet access
+- Consider stringing the stages together with queues to remove S3 access entirely
+
+### SFTP Security Enhancements
+
+1. **Harden SFTP settings**
    - Make host fingerprints mandatory for production deployments
-   - Add Terraform validation to prevent empty fingerprint lists in production
-   - Document secure fingerprint exchange process with counterparties
+   - For SFTP push: strengthen reminders that users have to share their host-key with the counterparty
+   - Harden SFTP crypto settings, though sadly many counterparties require outdated settings
 
-   - to research: **Lock File Verification**: Enable hash verification in Poetry lock files
+2. **Lock File Verification** (to research)
+   - Enable hash verification in Poetry lock files
 
-2. **Enhance File Upload Validation (T2.1)**
+### File Processing Security
+
+3. **Enhance File Upload Validation (T2.1)**
    - Add file size limits (e.g., 100MB) to prevent resource exhaustion
    - Implement zip bomb detection (max extraction ratio, nested depth)
    - Add virus scanning integration with Lambda
    - Validate file signatures/magic bytes
 
-### **Runtime Security & Sandboxing**
+4. **Content-Based Validation**
+   - Implement strict MIME type validation beyond magic bytes
+   - Add entropy analysis to detect suspicious files (encrypted payloads, etc.)
+   - Validate file structure before processing (ZIP directory, Excel sheet counts)
+   - Implement allowlists for acceptable file characteristics
+   - Use `defusedxml` instead of standard XML parsers for safer parsing
 
-**Lambda Runtime Restrictions:**
-- Use Lambda container images with minimal base images (distroless, alpine)
-- Implement seccomp profiles to restrict available system calls
-- Use AWS Lambda Powertools for structured logging and anomaly detection
-- Deploy Lambdas in private VPC subnets with no internet access
-- Use VPC endpoints for required AWS services only
+### Monitoring and Detection
 
-**Process Isolation:**
-- Run file processing in separate child processes with restricted privileges
-- Use Python `subprocess` with limited capabilities and timeouts
-- Implement memory and CPU limits per file processing operation
-- Remove unnecessary tools from Lambda execution environment
-- Disable shell access and command execution capabilities
+5. **Behavioral Analysis**
+   - Monitor Lambda execution patterns for anomalies (duration, memory, network)
+   - Implement CloudWatch custom metrics for file processing characteristics
+   - Alert on unexpected library imports or function calls
+   - Track file processing success/failure rates and patterns
 
-### **Enhanced Input Validation & Sanitization**
+6. **Runtime Security Monitoring**
+   - Use AWS GuardDuty for Lambda threat detection
+   - Implement custom CloudWatch Logs analysis for RCE indicators
+   - Monitor for unexpected outbound network connections
+   - Track temporary file creation patterns
 
-**Content-Based Validation:**
-- Implement strict MIME type validation beyond magic bytes
-- Add entropy analysis to detect suspicious files (encrypted payloads, etc.)
-- Validate file structure before processing (ZIP directory, Excel sheet counts)
-- Implement allowlists for acceptable file characteristics
-- Use `defusedxml` instead of standard XML parsers for safer parsing
+### Development and Operations
 
-**Parser Hardening:**
-- Pin exact dependency versions and audit regularly
-- Use read-only parsing modes where available
-- Implement parser-specific timeouts and resource limits
-- Consider alternative, more secure parsing libraries
-
-### **Monitoring & Detection**
-
-**Behavioral Analysis:**
-- Monitor Lambda execution patterns for anomalies (duration, memory, network)
-- Implement CloudWatch custom metrics for file processing characteristics
-- Alert on unexpected library imports or function calls
-- Track file processing success/failure rates and patterns
-
-**Runtime Security Monitoring:**
-- Use AWS GuardDuty for Lambda threat detection
-- Implement custom CloudWatch Logs analysis for RCE indicators
-- Monitor for unexpected outbound network connections
-- Track temporary file creation patterns
-
-### **Architectural Security**
-
-**Multi-Stage Processing:**
-- Implement "triage" Lambda with minimal permissions for file validation/classification
-- Use separate Lambdas per processing stage with stage-specific permissions
-- Implement checkpoints between stages to validate intermediate results
-
-**Quarantine System:**
-- Hold suspicious files in quarantine bucket for manual review
-- Implement automatic quarantine based on file characteristics or anomalies
-- Use separate IAM roles for quarantine operations
-
-### **Advanced Security Measures**
-
-**Static Analysis Integration:**
-- Run static analysis on uploaded files before processing
-- Implement YARA rules for malware detection
-- Use AWS Macie for sensitive data detection and classification
-
-**Cryptographic Verification:**
-- Implement file integrity checking with expected hashes
-- Use digital signatures for file authenticity verification
-- Implement "trust score" based on file source and characteristics
-
-**Backup & Recovery:**
-- Implement immutable backups with versioning
-- Use S3 Object Lock for critical data protection
-- Implement automated recovery procedures for compromised environments
-
-### **Development & Deployment Security**
-
-**Supply Chain Hardening:**
-- Use container image signing and verification
-- Implement reproducible builds with build attestation
-- Use dependency vulnerability scanning in CI/CD pipeline
-- Consider AWS CodeArtifact for dependency management
-
-**Testing & Validation:**
-- Implement fuzzing for file processing functions
-- Use property-based testing for input validation
-- Create test suite with known malicious files
-- Implement chaos engineering for resilience testing
-
-- tighten linting requirements
-- TODO: fuzz-testing file-processing?
-- TODO: limit file sizes?
-- TODO: suggest/faciliate disabling of unneeded risky functionality like processing XLSX, ZIP, GPG.
-- TODO: mitigate ZIP-bombs:
-  - overwriting files
-  - spamming too many files (maybe even require just a single file inside each ZIP and GPG)
-  - traversing paths (might already be covered)
-  - error on huge files. avoid resource exhaustion.
-- TODO: for push: mention a step of sharing our host-key to the counterparty
-- TODO: mention hardening SFTP crypto
-- TODO: github actions "features", like Mr Snok
-
-
+7. **Code Quality and Security**
+   - Tighten linting requirements
+   - Suggest/facilitate disabling of unneeded risky functionality like processing XLSX, ZIP, GPG
 
 ---
 
