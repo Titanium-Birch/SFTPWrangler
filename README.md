@@ -32,6 +32,11 @@ Key parts are:
 
 There's also code that pulls files from other sources, such as REST APIs, though the most interesting part of this repo is the SFTP flow. Nowadays we would use DLT to load data from REST APIs instead of how it's done here.
 
+### What are the security risks?
+
+We believe the risks are lower than trying to operate SFTP servers oneself directly.
+See the [threat model](./threat-modeling/THREAT_MODEL.md) for details.
+
 ### Flowchart
 
 ```mermaid
@@ -295,6 +300,9 @@ For detailed setup instructions, see [examples/README.md](examples/README.md).
 3. Ensure CI passes on your pull request (tests run automatically)
 4. Follow existing code style and patterns
 5. Update documentation for any new features
+
+Looking for ideas on what to contribute? See the [threat model](/threat-modeling/THREAT_MODEL.md)
+for a list of mitigations you could add to reduce security risks.
 
 ## Disclaimer
 
