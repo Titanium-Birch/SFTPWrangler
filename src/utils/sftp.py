@@ -131,7 +131,7 @@ def convert_to_pkey(input: str) -> Optional[PKey]:
     if not input:
         return None
 
-    for pkey_class in (paramiko.RSAKey, paramiko.DSSKey, paramiko.ECDSAKey, paramiko.Ed25519Key):
+    for pkey_class in (paramiko.RSAKey, paramiko.ECDSAKey, paramiko.Ed25519Key):
         try:
             return pkey_class.from_private_key(StringIO(input))
         except SSHException:
