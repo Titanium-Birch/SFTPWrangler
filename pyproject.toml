@@ -20,21 +20,21 @@ aws-lambda-typing = "^2.18.0"
 dataclasses-json = "^0.6.1"
 requests = "^2.34.2"
 python-gnupg = "^0.5.2"
-pandas = "^3.0.3"
+pandas = "^3.0.4"
 xlrd = "^2.0.1"
 openpyxl = "^3.1.4"
 paramiko = "^5.0.0"
-boto3-stubs = {extras = ["s3", "ssm", "secretsmanager"], version = "^1.43.34"}
+boto3-stubs = {extras = ["s3", "ssm", "secretsmanager"], version = "^1.43.36"}
 urllib3 = "^2.7.0"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.15.18"
+ruff = "^0.15.20"
 pytest-mock = "^3.11.1"
 pytest = "^9.1.1"
 pytest-docker = "^3.2.5"
 pytest-spec = "^6.1.0"
 pre-commit = "^4.6.0"
-boto3 = "^1.43.34"
+boto3 = "^1.43.36"
 requests-mock = "1.12.1"
 
 [build-system]
